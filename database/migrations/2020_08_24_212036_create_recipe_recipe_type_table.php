@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStepsTable extends Migration
+class CreateRecipeRecipeTypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,11 @@ class CreateStepsTable extends Migration
      */
     public function up()
     {
-        Schema::create('steps', function (Blueprint $table) {
-            $table->id();
-            $table->integer('order');
+        Schema::create('recipe_recipe_type', function (Blueprint $table) {
             $table->unsignedBigInteger('recipe_id');
-            $table->string('title');
-            $table->text('description');
-            $table->integer('time');
-            $table->softDeletes();
-            $table->timestamps();
+            $table->unsignedBigInteger('recipe_type_id');
             $table->foreign('recipe_id')->references('id')->on('recipes');
+            $table->foreign('recipe_type_id')->references('id')->on('recipe_types');
         });
     }
 
@@ -33,6 +28,6 @@ class CreateStepsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('steps');
+        Schema::dropIfExists('recipe_recipe_type');
     }
 }

@@ -15,7 +15,15 @@ class CreateRecipesTable extends Migration
     {
         Schema::create('recipes', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('description');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('visibility_id');
+            $table->integer('time'); #Time in minutes.
+            $table->softDeletes();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('visibility_id')->references('id')->on('visibilities');
         });
     }
 
