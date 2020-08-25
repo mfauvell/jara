@@ -38,4 +38,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * To enable softdeletes
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
+    public function recipes() {
+        return $this->hasMany(Recipe::class);
+    }
+
+    public function role() {
+        return $this->belongsTo(Role::class);
+    }
 }

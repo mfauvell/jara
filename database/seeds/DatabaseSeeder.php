@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Ingredient;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,6 +12,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
+        $this->call([
+            ProductionSeeder::class,
+            UserSeeder::class,
+            IngredientSeeder::class,
+            RecipeSeeder::class,
+            StepSeeder::class,
+        ]);
     }
 }
