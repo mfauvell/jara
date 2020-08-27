@@ -1,0 +1,14 @@
+#main, #topbar {
+    padding-left: 350px;
+    transition: 0.3s ease;
+}
+#main.collapsed, #topbar.collapsed {
+    padding-left: 50px;
+}
+#main.onmobile, #topbar.collapsed {
+    padding-left: 50px;
+}
+
+.bg-menu-jara {
+    background-color: #2a2a2e;
+}
