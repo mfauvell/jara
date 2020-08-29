@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -52,5 +53,20 @@ class User extends Authenticatable
 
     public function role() {
         return $this->belongsTo(Role::class);
+    }
+
+    public static function search(Array $params) {
+        $where = array();
+        // $where[] = array('deleted_at', 'IS NOT NULL', null);
+        if (isset($params['name']) && $params['name'] != '') {
+            $where[] = array('name', 'like', '%' . $params['name'] . '%');
+        }
+        if (isset($params['email']) && $params['email'] != '') {
+            $where[] = array('email', 'like', '%' . $params['email'] . '%');
+        }
+        if (isset($params['role_id']) && $params['role_id'] != '') {
+            $where[] = array('role_id', '=', $params['role_id']);
+        }
+        return DB::table('users')->select('id', 'name', 'email', 'role_id')->where($where)->whereNull('deleted_at')->get();
     }
 }

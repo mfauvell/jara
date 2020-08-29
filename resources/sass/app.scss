@@ -6,8 +6,17 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
 @import '~@fortawesome/fontawesome-free/scss/fontawesome';
 @import '~@fortawesome/fontawesome-free/scss/regular';
 @import '~@fortawesome/fontawesome-free/scss/solid';
 @import '~@fortawesome/fontawesome-free/scss/brands';
+
+@import '~vue-sidebar-menu/dist/vue-sidebar-menu.css';
+@import '~vue-good-table/dist/vue-good-table.css';
+@import '~vue2-dropzone/dist/vue2Dropzone.min.css';
+@import "~vue-select/src/scss/vue-select.scss";
+
 @import '../css/custom.css';
+
+@import './custom.scss';

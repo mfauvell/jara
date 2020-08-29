@@ -26,4 +26,26 @@ Route::get('/', function () {
 
 Route::group(['middleware' => ['web','auth']], function () {
     Route::get('/home', 'HomeController@index')->name('home');
+    #User routes
+    Route::get('/admin/users', 'UserController@index');
+    Route::get('/admin/users/create','UserController@create');
+    Route::get('/admin/users/search', 'UserController@search');
+    Route::post('/admin/users','UserController@store');
+    Route::get('/admin/users/{user_id}','UserController@edit');
+    Route::post('/admin/users/{user_id}','UserController@update');
+    Route::post('/admin/users/{user_id}/delete','UserController@delete');
+    #Recipe routes
+    Route::get('/recipes', 'RecipeController@index');
+    Route::get('/recipes/create','RecipeController@create');
+    Route::post('/recipes','RecipeController@store');
+    Route::get('/recipes/{recipe_id}','RecipeController@show');
+    Route::post('/recipes/{recipe_id}','RecipeController@update');
+    Route::post('/recipes/{recipe_id}/delete','RecipeController@delete');
+    #Ingredient routes
+    Route::get('/ingredients', 'IngredientController@index');
+    Route::get('/ingredients/create','IngredientController@create');
+    Route::post('/ingredients','IngredientController@store');
+    Route::get('/ingredients/{ingredient_id}','IngredientController@show');
+    Route::post('/ingredients/{ingredient_id}','IngredientController@update');
+    Route::post('/ingredients/{ingredient_id}/delete','IngredientController@delete');
 });

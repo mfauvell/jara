@@ -68,6 +68,16 @@
         <main id="main" class="py-4" :class="[{'collapsed' : collapsed}, {'onmobile' : isOnMobile}]">
             @yield('content')
         </main>
+        <notifications
+            :duration="5000"
+            :width="500"
+            classes="custom-notification"
+            animation-name="v-fade-right"
+            position="top right"
+            group="app"
+        >
+
+        </notifications>
     </div>
 </body>
 </html>
