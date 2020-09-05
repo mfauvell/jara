@@ -3,6 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-3 col-sd-3 col-xs-12">
                 <user-filter
+                    ref="userFilter"
                     :roles="roles"
                     @userFilterHasResults="rows = $event"
                 />
@@ -122,14 +123,22 @@ export default {
                 '/admin/users/'+id+'/delete'
             ).then(
                 res => {
-                    console.log(res);
-                    // $this.$ref.UserFilter.filter();
-                    this.$notify({
-                        group: 'app',
-                        type: 'success',
-                        title: 'Success!',
-                        text: 'Thes user has been deleted correctly!'
-                    });
+                    if (res['status'] == 200 && res['data'] == 1) {
+                        this.$refs.userFilter.filter();
+                        this.$notify({
+                            group: 'app',
+                            type: 'success',
+                            title: 'Success!',
+                            text: 'Thes user has been deleted correctly!'
+                        });
+                    } else {
+                        this.$notify({
+                            group: 'app',
+                            type: 'error',
+                            title: 'Error!',
+                            text: 'Something went wrong!'
+                        });
+                    }
                 }
             ).catch(
                 error => console.log(error)

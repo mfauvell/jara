@@ -20,6 +20,7 @@ class CreateImagesTable extends Migration
             $table->string('path');
             $table->string('mime');
             $table->string('md5');
+            $table->float('size');
             $table->nullableMorphs('imagable');
             $table->softDeletes();
             $table->timestamps();

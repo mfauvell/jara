@@ -78,16 +78,16 @@ class UserController extends Controller
         return $user->save();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $user_id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(int $user_id)
-    {
-        //
-    }
+    // /**
+    //  * Display the specified resource.
+    //  *
+    //  * @param  int  $user_id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function show(int $user_id)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -144,6 +144,12 @@ class UserController extends Controller
         return $user->delete();
     }
 
+    /**
+     * Obtain a collection of User instance
+     *
+     * @param Request $request
+     * @return collection /App/Model/User
+     */
     public function search(Request $request){
         if (!$this->police->can_do(User::class,'view',auth()->user())) {
             return response()->json(['error' => 'Not authorized.'],403);

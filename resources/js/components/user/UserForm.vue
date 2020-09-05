@@ -96,13 +96,21 @@ export default {
                 params
             ).then(
                 res => {
-                    console.log(res);
-                    this.$notify({
-                        group: 'app',
-                        type: 'success',
-                        title: 'Success!',
-                        text: 'Thes user has been saved correctly!'
-                    });
+                    if (res['status'] == 200 && res['data'] == 1) {
+                        this.$notify({
+                            group: 'app',
+                            type: 'success',
+                            title: 'Success!',
+                            text: 'Thes user has been saved correctly!'
+                        });
+                    } else {
+                        this.$notify({
+                            group: 'app',
+                            type: 'error',
+                            title: 'Error!',
+                            text: 'Something went wrong!'
+                        });
+                    }
                 }
             ).catch(
                 error => console.log(error)

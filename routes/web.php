@@ -44,8 +44,12 @@ Route::group(['middleware' => ['web','auth']], function () {
     #Ingredient routes
     Route::get('/ingredients', 'IngredientController@index');
     Route::get('/ingredients/create','IngredientController@create');
+    Route::get('/ingredients/search', 'IngredientController@search');
     Route::post('/ingredients','IngredientController@store');
-    Route::get('/ingredients/{ingredient_id}','IngredientController@show');
+    Route::get('/ingredients/{ingredient_id}','IngredientController@edit');
     Route::post('/ingredients/{ingredient_id}','IngredientController@update');
     Route::post('/ingredients/{ingredient_id}/delete','IngredientController@delete');
+    Route::post('/ingredients/image/upload', 'IngredientController@uploadImage');
+    #Images
+    Route::get('/images/{image_id}', 'ImageController@getImage');
 });

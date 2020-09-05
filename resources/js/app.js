@@ -15,13 +15,16 @@ import VueGoodTablePlugin from 'vue-good-table'
 import vue2Dropzone from 'vue2-dropzone'
 import vSelect from 'vue-select'
 import Notifications from 'vue-notification'
+import FileSelector from 'vue-file-selector';
+import JwPagination from 'jw-vue-pagination';
 
 import store from './store/store';
 
 Vue.use(VueSidebarMenu);
 Vue.use(VueGoodTablePlugin);
-Vue.use(vue2Dropzone);
-Vue.use(Notifications)
+// Vue.use(vue2Dropzone);
+Vue.use(Notifications);
+Vue.use(FileSelector);
 
 /**
  * The following block of code may be used to automatically register your
@@ -35,12 +38,16 @@ Vue.use(Notifications)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 //Components imported
 Vue.component('v-select', vSelect);
+// Vue.component('vue-dropzone', vue2Dropzone);
+Vue.component('jw-pagination', JwPagination);
 
 //My components
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('my-menu', require('./components/MyMenu.vue').default);
 Vue.component('user-list', require('./components/user/UserList.vue').default);
 Vue.component('user-form', require('./components/user/UserForm.vue').default);
+Vue.component('ingredient-list', require('./components/ingredient/IngredientList.vue').default);
+Vue.component('ingredient-form', require('./components/ingredient/IngredientForm.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
