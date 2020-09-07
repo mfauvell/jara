@@ -24,6 +24,10 @@ class Police
                 $return = $this->can_do_ingredient($action,$user,$about);
                 break;
 
+            case Recipe::class:
+                $return = $this->can_do_recipe($action,$user,$about);
+                break;
+
             default:
                 $return = false;
                 break;
@@ -75,6 +79,32 @@ class Police
 
             case 'delete':
                 $return = in_array($user->role()->first()->name, ['SuperAdmin', 'Admin']) ? true : false;
+                break;
+
+            default:
+                # code...
+                break;
+        }
+        return $return;
+    }
+
+    private function can_do_recipe(String $action, User $user, $about = null){
+        $return = false;
+        switch ($action) {
+            case 'view':
+                $return = true;
+                break;
+
+            case 'edit':
+                $return = true;
+                break;
+
+            case 'create':
+                $return =true;
+                break;
+
+            case 'delete':
+                $return = true;
                 break;
 
             default:

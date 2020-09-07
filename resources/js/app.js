@@ -17,6 +17,7 @@ import vSelect from 'vue-select'
 import Notifications from 'vue-notification'
 import FileSelector from 'vue-file-selector';
 import JwPagination from 'jw-vue-pagination';
+import VueGallery from 'vue-gallery';
 
 import store from './store/store';
 
@@ -40,6 +41,7 @@ Vue.use(FileSelector);
 Vue.component('v-select', vSelect);
 // Vue.component('vue-dropzone', vue2Dropzone);
 Vue.component('jw-pagination', JwPagination);
+Vue.component('VGallery', VueGallery);
 
 //My components
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
@@ -48,6 +50,7 @@ Vue.component('user-list', require('./components/user/UserList.vue').default);
 Vue.component('user-form', require('./components/user/UserForm.vue').default);
 Vue.component('ingredient-list', require('./components/ingredient/IngredientList.vue').default);
 Vue.component('ingredient-form', require('./components/ingredient/IngredientForm.vue').default);
+Vue.component('recipe-form', require('./components/recipe/RecipeForm.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

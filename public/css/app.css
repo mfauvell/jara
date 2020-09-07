@@ -17638,6 +17638,89 @@ readers do not read off random characters that represent icons */
   opacity: 1;
 }
 
+.img-thumbnail {
+  max-height: 400px;
+}
+
+.section-top {
+  margin-bottom: 2rem;
+  color: #6f6f6f;
+  font-size: 0.875rem;
+}
+
+.section-bottom {
+  margin-top: 2rem;
+  color: #6f6f6f;
+  font-size: 0.875rem;
+}
+
+.section-loader {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all ease 300ms;
+  background-color: rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+}
+
+.fs-file-selector {
+  margin-top: 1rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: -2px;
+  text-align: center;
+  background-color: rgba(0, 132, 132, 0.05);
+  -webkit-backdrop-filter: blur(35px) saturate(200%);
+          backdrop-filter: blur(35px) saturate(200%);
+  border-top: 2px solid #008484;
+  border-bottom: 2px solid #008484;
+  transition: all ease 300ms;
+}
+
+.fs-file-selector .fs-droppable {
+  padding: 2rem 0;
+  transition: all ease 200ms;
+}
+
+.fs-file-selector .fs-btn-select {
+  background-color: #008484;
+  padding: 0.75rem 2rem;
+  color: #fff;
+  border-radius: 1px;
+  transition: all ease 200ms;
+}
+
+.fs-file-selector .fs-btn-select:hover {
+  cursor: pointer;
+  background-color: #009e9e;
+}
+
+.fs-file-selector .fs-btn-select:active {
+  background-color: #006b6b;
+  transform: scale(0.95);
+  transition: all ease 60ms;
+}
+
+.fs-file-selector .fs-loader {
+  background-color: transparent !important;
+}
+
+.fs-file-selector.fs-drag-enter {
+  background-color: rgba(0, 132, 132, 0.1);
+}
+
+.fs-file-selector.fs-drag-enter .fs-droppable {
+  transition: all ease 100ms;
+  transform: scale(0.98);
+}
+
 .custom-notification {
   display: flex;
   flex-direction: row;

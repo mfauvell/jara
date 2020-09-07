@@ -186,4 +186,15 @@ class IngredientController extends Controller
         });
         return $ingredientsData;
     }
+
+    public function getIngredient(int $ingredient_id) {
+        if (!$this->police->can_do(Ingredient::class,'view',auth()->user())) {
+            return response()->json(['error' => 'Not authorized.'],403);
+        }
+        $ingredient = Ingredient::find($ingredient_id);
+        return array(
+            'ingredient' => $ingredient,
+            'image' => $ingredient->images()->first()
+        );
+    }
 }

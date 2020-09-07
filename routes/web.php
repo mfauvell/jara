@@ -39,8 +39,10 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::get('/recipes/create','RecipeController@create');
     Route::post('/recipes','RecipeController@store');
     Route::get('/recipes/{recipe_id}','RecipeController@show');
+    Route::get('/recipes/{recipe_id}/edit','RecipeController@edit');
     Route::post('/recipes/{recipe_id}','RecipeController@update');
     Route::post('/recipes/{recipe_id}/delete','RecipeController@delete');
+    Route::post('/recipes/image/upload', 'RecipeController@uploadImage');
     #Ingredient routes
     Route::get('/ingredients', 'IngredientController@index');
     Route::get('/ingredients/create','IngredientController@create');
@@ -50,6 +52,7 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::post('/ingredients/{ingredient_id}','IngredientController@update');
     Route::post('/ingredients/{ingredient_id}/delete','IngredientController@delete');
     Route::post('/ingredients/image/upload', 'IngredientController@uploadImage');
+    Route::get('/ingredients/getIngredient/{ingredient_id}', 'IngredientController@getIngredient');
     #Images
     Route::get('/images/{image_id}', 'ImageController@getImage');
 });
