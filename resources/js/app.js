@@ -12,12 +12,15 @@ import {mapGetters, mapActions} from 'vuex';
 import VueSidebarMenu from 'vue-sidebar-menu'
 
 import VueGoodTablePlugin from 'vue-good-table'
-import vue2Dropzone from 'vue2-dropzone'
+// import vue2Dropzone from 'vue2-dropzone'
 import vSelect from 'vue-select'
 import Notifications from 'vue-notification'
 import FileSelector from 'vue-file-selector';
 import JwPagination from 'jw-vue-pagination';
 import VueGallery from 'vue-gallery';
+// import Autocomplete from '@trevoreyre/autocomplete-vue'
+import Autocomplete from 'v-autocomplete';
+import VModal from 'vue-js-modal';
 
 import store from './store/store';
 
@@ -26,6 +29,16 @@ Vue.use(VueGoodTablePlugin);
 // Vue.use(vue2Dropzone);
 Vue.use(Notifications);
 Vue.use(FileSelector);
+Vue.use(Autocomplete);
+Vue.use(VModal, {
+    dynamicDefaults: {
+        draggable: true,
+        resizable: true,
+        adatative: true,
+        height: 'auto',
+        width: '800'
+    }
+});
 
 /**
  * The following block of code may be used to automatically register your

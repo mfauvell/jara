@@ -6,5 +6,6 @@
         :images="{{$images}}"
         :ingredients="{{$ingredients}}"
         :visibilities="{{$visibilities}}"
+        :steps="{{$steps}}"
     />
 @endsection

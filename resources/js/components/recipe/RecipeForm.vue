@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-6 col-sd-6 col-xs-12">
                 <div class="col-md-12 col-sd-12 col-xs-12">
-                    <v-gallery :images="imagesGallery" :index="indexImage" @close="indexImage = null" id="recipe-gallery"></v-gallery>
+                    <v-gallery :images="imagesGallery" :index="indexImage" @close="indexImage = null" :id="'recipe-gallery'"></v-gallery>
                     <div class="row text-center">
                         <div class="col-md-12 col-sd-12 col-xs-12 text-center align-middle">
                             <div class="align-middle" style="height: 320px; position: relative;">
@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="col-md-12 col-sd-12 col-xs-12">
                                     <label for="recipe-description">Description</label>
-                                    <input type="text" id="recipe-description" class="form-control" v-model="description" required>
+                                    <textarea  id="recipe-description" class="form-control" v-model="description" required rows="5"></textarea>
                                 </div>
                                 <div class="col-md-6 col-sd-6 col-xs-12">
                                     <label for="recipe-time">Time</label>
@@ -87,20 +87,76 @@
             <div class="col-md-12 col-sd-12 col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Ingredients</h2>
+                        <div class="row">
+                            <div class="col-md-9 col-sd-9 col-xs-12">
+                                <h2>Ingredients</h2>
+                            </div>
+                            <div class="col-md-3 col-sd-3 col-xs-12">
+                                <input type="button" class="btn btn-success float-right mr-3" @click="addRowIngredient" value="Add">
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
-                        Ingredients
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Ingredient</th>
+                                    <th>Quantity</th>
+                                    <th>Unit</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    is="ingredient-row"
+                                    v-for="(row, index) in ingredientsList"
+                                    :key="index"
+                                    :row="row"
+                                    :index="index"
+                                    @deleteRow="ingredientsList.splice($event,1)"
+                                    :allIngredients="allIngredients"
+                                />
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="col-md-12 col-sd-12 col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Steps</h2>
+                        <div class="row">
+                            <div class="col-md-9 col-sd-9 col-xs-12">
+                                <h2>Steps</h2>
+                            </div>
+                            <div class="col-md-3 col-sd-3 col-xs-12">
+                                <input type="button" class="btn btn-success float-right mr-3" @click="addStep" value="Add">
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
-                        Steps
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Time</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Gallery</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    is="step-row"
+                                    v-for="(row, index) in stepsList"
+                                    :key="index"
+                                    :row="row"
+                                    :index="index"
+                                    @stepRemove="deleteStep($event)"
+                                />
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -109,6 +165,10 @@
 </template>
 
 <script>
+import RecipeIngredientRow from './RecipeIngredientRow';
+import RecipeStepRow from './RecipeStepRow';
+import StepForm from '../step/StepForm';
+
 export default {
     data() {
         return {
@@ -123,7 +183,11 @@ export default {
             currentImages: null,
             nextImages: null,
             imagesGallery: [],
-            ingredientsList: []
+            ingredientsList: [],
+            allIngredients: null,
+            stepsList: [],
+            currentSteps: null,
+            nextSteps: null
         }
     },
     computed: {
@@ -146,7 +210,12 @@ export default {
         recipe: Object,
         images: Array,
         ingredients: Array,
-        visibilities: Array
+        visibilities: Array,
+        steps: Array
+    },
+    components: {
+        ingredientRow: RecipeIngredientRow,
+        stepRow: RecipeStepRow
     },
     methods: {
         deleteImage() {
@@ -157,6 +226,11 @@ export default {
                 this.imageSelected = this.imagesGallery.length > 0 ? 0 : null;
             }
         },
+        deleteStep(index) {
+            let stepId = this.stepsList[index].id;
+            this.nextSteps = this.nextSteps.filter(e => e != stepId);
+            this.stepsList.splice(index,1)
+        },
         uploadFile(files) {
             this.isLoading = true;
             let formData = new FormData();
@@ -165,14 +239,17 @@ export default {
             axios.post(
                 url,
                 formData,
-                {headers: {
-                    'Content-Type': 'multipart/form-data'
-                }}
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
             ).then(
                 res => {
                     let id = res.data.id;
                     this.imagesGallery.push('/images/'+id);
                     this.nextImages.push(id);
+                    this.imageSelected = this.imagesGallery.length -1;
                 }
             ).catch(
                 error => console.log(error)
@@ -191,7 +268,10 @@ export default {
                 time: this.time,
                 visibility: this.visibility,
                 currentImages: this.currentImages,
-                nextImages: this.nextImages
+                nextImages: this.nextImages,
+                ingredientsList: this.ingredientsList,
+                currentSteps: this.currentSteps,
+                nextSteps: this.nextSteps
             };
             let url = '/recipes';
             if (this.id != 0) url = url+'/'+this.id;
@@ -200,7 +280,7 @@ export default {
                 params
             ).then(
                 res => {
-                    if (res['status'] == 200 && res['data'] == 1) {
+                    if (res['status'] == 200 && res['data'] != 0) {
                         this.$notify({
                             group: 'app',
                             type: 'success',
@@ -240,7 +320,49 @@ export default {
                 }
             );
 
-        }
+        },
+        addRowIngredient() {
+            this.ingredientsList.push({
+                id: 0,
+                name: '',
+                image: 0,
+                quantity: '',
+                unit: ''
+            })
+        },
+        addStep() {
+            this.$modal.show(
+                StepForm,
+                {
+                    id: 0,
+                    valueUpdate: (newValue) => {
+                        // this.$emit('stepCreateRow',newValue);
+                        this.stepsList.push(newValue);
+                        this.nextSteps.push(newValue.id);
+                    }
+                },
+            )
+        },
+        getAllIngredient() {
+            return new Promise(
+                (resolve, reject) => {
+                    let url = '/ingredients/search';
+                    axios.get(
+                        url
+                    ).then(
+                        res => {
+                            if (res['status'] == 200 ) {
+                                resolve(res.data);
+                            } else {
+                                reject([]);
+                            }
+                        }
+                    ).catch(
+                        error => console.log(error)
+                    );
+                }
+            );
+        },
     },
     created: function() {
         //Images
@@ -267,6 +389,30 @@ export default {
                 };
                 this.ingredientsList.push(row);
             });
+        }
+        this.getAllIngredient().then( allIngredients => {
+            this.allIngredients = allIngredients;
+        });
+        //Steps
+        this.stepsList = [];
+        this.currentSteps = [];
+        this.nextSteps = [];
+        for (var i = 0; i < this.steps.length; i++) {
+            let step = this.steps[i];
+            let stepGallery = [];
+            for (var j = 0; j < step.images.length; j++) {
+                stepGallery.push(step.images[j].id);
+            }
+            this.stepsList.push({
+                id: step.id,
+                order: step.order,
+                time: step.time,
+                title: step.title,
+                description: step.description,
+                images: stepGallery
+            })
+            this.currentSteps.push(step.id);
+            this.nextSteps.push(step.id);
         }
     },
 }
