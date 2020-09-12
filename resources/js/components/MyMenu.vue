@@ -44,28 +44,29 @@
                     {
                         href: '/',
                         title: 'Dashboard',
-                        icon: 'fa fa-user'
+                        icon: 'fas fa-home'
                     },
                     {
                         href: '/recipes',
                         title: 'Recipes',
-                        icon: 'fa fa-user'
+                        icon: 'fas fa-utensils'
                     },
                     {
                         href: '/ingredients',
                         title: 'Ingredients',
-                        icon: 'fa fa-user'
+                        icon: 'fas fa-fish'
                     },
                     {
                         component: separator
                     },
                     {
                         title: 'Admin',
-                        icon: 'fa fa-chart-area',
+                        icon: 'fas fa-tools',
                         child: [
                             {
                                 href: '/admin/users',
-                                title: 'Users'
+                                title: 'Users',
+                                icon: 'fa fa-user'
                             }
                         ],
                         hidden: !this.isAdmin,

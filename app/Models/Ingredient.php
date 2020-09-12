@@ -17,6 +17,8 @@ class Ingredient extends Model
      */
     protected $dates = ['deleted_at'];
 
+    protected $with = ['images'];
+
     public function recipes() {
         return $this->belongsToMany(Recipe::class)->withPivot('quantity', 'unit', 'section');
     }

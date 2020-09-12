@@ -127,7 +127,7 @@ class Police
 
             case 'delete':
                 $return = false;
-                if ($user->role()->name == "SuperAdmin") {
+                if ($user->role()->first()->name == "SuperAdmin") {
                     $return = true;
                 }
                 break;

@@ -9,7 +9,7 @@
                     <span>Time: {{recipe.time}} min.</span>
                 </div>
 
-                <input type="button" class="btn btn-primary" @click="editRecipe" value="Open">
+                <input type="button" class="btn btn-primary" @click="viewRecipe" value="Open">
             </div>
         </div>
     </div>
@@ -20,7 +20,6 @@ export default {
     data() {
         return {
             indexImage: 0,
-            // imageUrl: 'images/'+(this.recipe.images.length > 0 ? this.recipe.images[0].id : 0)
         }
     },
     props: {
@@ -36,7 +35,7 @@ export default {
         editRecipe() {
             window.location = '/recipes/'+this.recipe.id+'/edit';
         },
-        openRecipe() {
+        viewRecipe() {
             window.location = '/recipes/'+this.recipe.id;
         },
         changeImage() {
@@ -46,7 +45,6 @@ export default {
                 } else {
                     this.indexImage += 1;
                 }
-                // this.imageUrl = '/images/'+this.recipe.images[this.indexImage].id;
             }
         }
     },

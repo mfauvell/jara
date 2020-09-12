@@ -37,14 +37,14 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::post('/admin/users/{user_id}','UserController@update');
     Route::post('/admin/users/{user_id}/delete','UserController@delete');
     #Recipe routes
-    Route::get('/recipes', 'RecipeController@index');
+    Route::get('/recipes', 'RecipeController@index')->name('recipes');
     Route::get('/recipes/create','RecipeController@create');
     Route::get('/recipes/search', 'RecipeController@search');
     Route::post('/recipes','RecipeController@store');
     Route::get('/recipes/{recipe_id}','RecipeController@show');
     Route::get('/recipes/{recipe_id}/edit','RecipeController@edit');
     Route::post('/recipes/{recipe_id}','RecipeController@update');
-    Route::post('/recipes/{recipe_id}/delete','RecipeController@delete');
+    Route::get('/recipes/{recipe_id}/delete','RecipeController@delete');
     Route::post('/recipes/image/upload', 'RecipeController@uploadImage');
     #Ingredient routes
     Route::get('/ingredients', 'IngredientController@index');

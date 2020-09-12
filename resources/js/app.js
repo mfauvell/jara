@@ -67,6 +67,7 @@ Vue.component('ingredient-list', require('./components/ingredient/IngredientList
 Vue.component('ingredient-form', require('./components/ingredient/IngredientForm.vue').default);
 Vue.component('recipe-list', require('./components/recipe/RecipeList.vue').default);
 Vue.component('recipe-form', require('./components/recipe/RecipeForm.vue').default);
+Vue.component('recipe', require('./components/recipe/Recipe.vue').default);
 Vue.component('dashboard', require('./components/Dashboard.vue').default)
 
 /**

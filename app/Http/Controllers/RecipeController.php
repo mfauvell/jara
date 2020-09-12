@@ -10,6 +10,7 @@ use App\Models\Police;
 use App\Models\Visibility;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class RecipeController extends Controller
 {
@@ -130,7 +131,17 @@ class RecipeController extends Controller
      */
     public function show(int $recipe_id)
     {
-        //
+        $recipe = Recipe::with(['images','visibility','ingredients','steps'])->find($recipe_id);
+        if (!$this->police->can_do(Recipe::class,'view',auth()->user(),$recipe)) {
+            return response()->json(['error' => 'Not authorized.'],403);
+        }
+        $editable = $this->police->can_do(Recipe::class,'edit',auth()->user(),$recipe);
+        $deletable = $this->police->can_do(Recipe::class,'delete',auth()->user(),$recipe);
+        return view('recipes/recipe')->with([
+            'recipe' => $recipe,
+            'editable' => $editable,
+            'deletable' => $deletable
+        ]);
     }
 
     /**
@@ -224,7 +235,12 @@ class RecipeController extends Controller
      */
     public function delete(int $recipe_id)
     {
-        //
+        $recipe = Recipe::find($recipe_id);
+        if (!$this->police->can_do(Recipe::class,'delete',auth()->user(),$recipe)) {
+            return response()->json(['error' => 'Not authorized.'],403);
+        }
+        $recipe->delete();
+        return Redirect::route('recipes');
     }
 
     public function uploadImage(Request $request) {

@@ -71,12 +71,6 @@ class Recipe extends Model
                 });
             }
         });
-        if (isset($params['latest']) && $params['latest']){
-            $query = $query->latest();
-        }
-        if (isset($params['limit']) && $params['limit'] != '') {
-            $query = $query->take($params['limit']);
-        }
         if (isset($params['onlyPublic']) && $params['onlyPublic']){
             $query = $query->whereHas('visibility',function($q) {
                 $q->where('name','=','Public');
@@ -85,6 +79,12 @@ class Recipe extends Model
             $query = $query->whereHas('visibility',function($q) {
                 $q->where('name','=','Private');
             });
+        }
+        if (isset($params['latest']) && $params['latest']){
+            $query = $query->latest('updated_at');
+        }
+        if (isset($params['limit']) && $params['limit'] != '') {
+            $query = $query->take($params['limit']);
         }
         return $query->get();
     }
