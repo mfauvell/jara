@@ -21,6 +21,7 @@ import VueGallery from 'vue-gallery';
 // import Autocomplete from '@trevoreyre/autocomplete-vue'
 import Autocomplete from 'v-autocomplete';
 import VModal from 'vue-js-modal';
+import VueCarousel from 'vue-carousel';
 
 import store from './store/store';
 
@@ -39,6 +40,7 @@ Vue.use(VModal, {
         width: '800'
     }
 });
+Vue.use(VueCarousel);
 
 /**
  * The following block of code may be used to automatically register your
@@ -63,7 +65,9 @@ Vue.component('user-list', require('./components/user/UserList.vue').default);
 Vue.component('user-form', require('./components/user/UserForm.vue').default);
 Vue.component('ingredient-list', require('./components/ingredient/IngredientList.vue').default);
 Vue.component('ingredient-form', require('./components/ingredient/IngredientForm.vue').default);
+Vue.component('recipe-list', require('./components/recipe/RecipeList.vue').default);
 Vue.component('recipe-form', require('./components/recipe/RecipeForm.vue').default);
+Vue.component('dashboard', require('./components/Dashboard.vue').default)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

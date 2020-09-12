@@ -23,7 +23,6 @@ class ImageController extends Controller
         $this->police = $police;
     }
 
-
     public function getImage(int $image_id) {
         $image = Image::find($image_id);
         if (!$image && $image_id != 0) {
@@ -42,38 +41,5 @@ class ImageController extends Controller
         $response->header("Content-Type", $type);
 
         return $response;
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Image  $image
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Image $image)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Image  $image
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Image $image)
-    {
-        //
     }
 }

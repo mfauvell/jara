@@ -28,6 +28,7 @@
         "@trevoreyre/autocomplete-vue": "^2.2.0",
         "jw-vue-pagination": "^1.0.3",
         "v-autocomplete": "^1.8.2",
+        "vue-carousel": "^0.18.0",
         "vue-file-selector": "^0.6.0",
         "vue-gallery": "^2.0.1",
         "vue-good-table": "^2.21.0",

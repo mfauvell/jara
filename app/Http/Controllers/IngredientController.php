@@ -29,7 +29,7 @@ class IngredientController extends Controller
      */
     public function index()
     {
-        if (!$this->police->can_do(Ingredient::class,'create',auth()->user())) {
+        if (!$this->police->can_do(Ingredient::class,'view',auth()->user())) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $ingredients = Ingredient::all();
@@ -85,18 +85,7 @@ class IngredientController extends Controller
             $ingredient->images()->save($image);
             $rdo = $ingredient->save();
         }
-        return $rdo;
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $ingredient_id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(int $ingredient_id)
-    {
-        //
+        return $ingredient->id;
     }
 
     /**

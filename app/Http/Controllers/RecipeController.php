@@ -8,6 +8,7 @@ use App\Models\Ingredient;
 use App\Models\Step;
 use App\Models\Police;
 use App\Models\Visibility;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RecipeController extends Controller
@@ -32,7 +33,21 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        //
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+        if (!$this->police->can_do(Recipe::class,'view',$user)) {
+            return response()->json(['error' => 'Not authorized.'],403);
+        }
+
+        $recipes = $this->search(new Request());
+
+        $recipes = $recipes->map(function ($recipe) {
+            $recipe->images = $recipe->images()->get();
+            return $recipe;
+        });
+        return view('recipes/list')->with([
+            'recipes' => $recipes
+        ]);
     }
 
     /**
@@ -126,10 +141,10 @@ class RecipeController extends Controller
      */
     public function edit(int $recipe_id)
     {
-        if (!$this->police->can_do(Recipe::class,'edit',auth()->user())) {
+        $recipe = Recipe::find($recipe_id);
+        if (!$this->police->can_do(Recipe::class,'edit',auth()->user(),$recipe)) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
-        $recipe = Recipe::find($recipe_id);
         $images = $recipe->images()->get();
         $ingredients = $recipe->ingredients()->get();
         $visibilities = Visibility::all();
@@ -156,11 +171,11 @@ class RecipeController extends Controller
      */
     public function update(Request $request, int $recipe_id)
     {
-        if (!$this->police->can_do(Recipe::class,'edit',auth()->user())) {
+        $recipe = Recipe::find($recipe_id);
+        if (!$this->police->can_do(Recipe::class,'edit',auth()->user(),$recipe)) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
-        $recipe = Recipe::find($recipe_id);
         $recipe->title = $params['title'];
         $recipe->description = $params['description'];
         $recipe->time = $params['time'];
@@ -218,5 +233,25 @@ class RecipeController extends Controller
 
         //TODO: Control error
         return Image::upload('recipe', $params['file']);
+    }
+
+    public function search(Request $request) {
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+        if (!$this->police->can_do(Recipe::class,'view',$user)) {
+            return response()->json(['error' => 'Not authorized.'],403);
+        }
+        $params = $request->all();
+        $params['admin'] = false;
+        if ($user->role()->first()->name == 'SuperAdmin') {
+            $params['admin'] = true;
+        }
+        $recipes = Recipe::search($params);
+        $recipes = $recipes->map(function ($recipe) {
+            $recipe->images = $recipe->images()->get();
+            return $recipe;
+        });
+
+        return $recipes;
     }
 }

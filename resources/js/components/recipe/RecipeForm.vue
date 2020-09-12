@@ -49,40 +49,47 @@
                 </div>
             </div>
             <div class="col-md-6 col-sd-6 col-xs-12">
-                <div>
-                    <input type="button" class="btn btn-primary" value="Save" @click="saveRecipe">
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Basic Data</h2>
+                <div class="row">
+                    <div class="col-md-12 col-sd-12 col-xs-12">
+                        <input type="button" class="btn btn-primary save-recipe" value="Save" @click="saveRecipe">
                     </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-md-12 col-sd-12 col-xs-12">
-                                    <label for="recipe-title">Title</label>
-                                    <input type="text" id="recipe-title" class="form-control" v-model="title" required>
-                                </div>
-                                <div class="col-md-12 col-sd-12 col-xs-12">
-                                    <label for="recipe-description">Description</label>
-                                    <textarea  id="recipe-description" class="form-control" v-model="description" required rows="5"></textarea>
-                                </div>
-                                <div class="col-md-6 col-sd-6 col-xs-12">
-                                    <label for="recipe-time">Time</label>
-                                    <input type="text" id="recipe-time" class="form-control" v-model="time" required>
-                                </div>
-                                <div class="col-md-6 col-sd-6 col-xs-12">
-                                    <label for="recipe-visibility">Visibility</label>
-                                    <v-select
-                                        id="recipe-visibility"
-                                        :options="selectVisibilities"
-                                        v-model="visibilityComputed"
-                                    />
+                    <div class="col-md-12 col-sd-12 col-xs-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Basic Data</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sd-12 col-xs-12">
+                                            <label for="recipe-title">Title</label>
+                                            <input type="text" id="recipe-title" class="form-control" v-model="title" required>
+                                        </div>
+                                        <div class="col-md-12 col-sd-12 col-xs-12">
+                                            <label for="recipe-description">Description</label>
+                                            <textarea  id="recipe-description" class="form-control" v-model="description" required rows="5"></textarea>
+                                        </div>
+                                        <div class="col-md-6 col-sd-6 col-xs-12">
+                                            <label for="recipe-time">Time</label>
+                                            <input type="text" id="recipe-time" class="form-control" v-model="time" required>
+                                        </div>
+                                        <div class="col-md-6 col-sd-6 col-xs-12">
+                                            <label for="recipe-visibility">Visibility</label>
+                                            <v-select
+                                                id="recipe-visibility"
+                                                :options="selectVisibilities"
+                                                v-model="visibilityComputed"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-12 col-sd-12 col-xs-12">
+                <input type="button" class="btn btn-primary save-recipe" value="Save" @click="saveRecipe">
             </div>
             <div class="col-md-12 col-sd-12 col-xs-12">
                 <div class="card">
@@ -123,6 +130,9 @@
                 </div>
             </div>
             <div class="col-md-12 col-sd-12 col-xs-12">
+                <input type="button" class="btn btn-primary save-recipe" value="Save" @click="saveRecipe">
+            </div>
+            <div class="col-md-12 col-sd-12 col-xs-12">
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
@@ -159,6 +169,9 @@
                         </table>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-12 col-sd-12 col-xs-12">
+                <input type="button" class="btn btn-primary save-recipe" value="Save" @click="saveRecipe">
             </div>
         </div>
     </div>
@@ -261,6 +274,7 @@ export default {
             // if (!this.validateData()){
             //     return;
             // }
+            let oldId = this.id;
             const params = {
                 id: this.id,
                 title: this.title,
@@ -287,6 +301,11 @@ export default {
                             title: 'Success!',
                             text: 'The recipe has been saved correctly!'
                         });
+                        if (oldId == 0) {
+                            this.sleep(2000).then(() => {
+                                window.location = '/recipes/'+res['data']+'/edit';
+                            });
+                        }
                     } else {
                         this.$notify({
                             group: 'app',
@@ -363,6 +382,9 @@ export default {
                 }
             );
         },
+        sleep(time) {
+            return new Promise((resolve) => setTimeout(resolve, time));
+        }
     },
     created: function() {
         //Images
@@ -429,5 +451,12 @@ export default {
   .image-border {
     border: 1px solid #ebebeb;
     margin: 5px;
+  }
+
+  .save-recipe {
+      margin-bottom: 10px;
+      margin-top: 10px;
+      margin-right: 20px;
+      float: right;
   }
 </style>

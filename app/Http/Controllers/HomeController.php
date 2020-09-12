@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Recipe;
+use App\Models\Police;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,20 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $recipeController = new RecipeController(new Police());
+        $publicRecipes = $recipeController->search(new Request([
+            'latest' => 1,
+            'limit' => 10,
+            'onlyPublic' => 1
+        ]));
+        $privateRecipes = $recipeController->search(new Request([
+            'latest' => 1,
+            'limit' => 10,
+            'onlyPrivate' => 1
+        ]));
+        return view('home')->with([
+            'lastPublicRecipes' => $publicRecipes,
+            'lastPrivateRecipes' => $privateRecipes
+        ]);
     }
 }

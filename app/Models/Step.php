@@ -16,6 +16,8 @@ class Step extends Model
      */
     protected $dates = ['deleted_at'];
 
+    protected $with = ['images'];
+
     public function recipe() {
         return $this->belongsTo(Recipe::class);
     }

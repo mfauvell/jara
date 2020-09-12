@@ -3,6 +3,7 @@
 use App\Http\Controllers\RecipeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +22,7 @@ Route::get('/', function () {
     if (auth()->guest()) {
         return view('auth/login');
     } else {
-        return view('home');
+        return Redirect::route('home');
     }
 });
 
@@ -38,13 +39,13 @@ Route::group(['middleware' => ['web','auth']], function () {
     #Recipe routes
     Route::get('/recipes', 'RecipeController@index');
     Route::get('/recipes/create','RecipeController@create');
+    Route::get('/recipes/search', 'RecipeController@search');
     Route::post('/recipes','RecipeController@store');
     Route::get('/recipes/{recipe_id}','RecipeController@show');
     Route::get('/recipes/{recipe_id}/edit','RecipeController@edit');
     Route::post('/recipes/{recipe_id}','RecipeController@update');
     Route::post('/recipes/{recipe_id}/delete','RecipeController@delete');
     Route::post('/recipes/image/upload', 'RecipeController@uploadImage');
-    // Route::get('/recipes/{recipe_id}/steps','RecipeController@getSteps');
     #Ingredient routes
     Route::get('/ingredients', 'IngredientController@index');
     Route::get('/ingredients/create','IngredientController@create');

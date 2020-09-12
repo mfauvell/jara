@@ -78,17 +78,6 @@ class UserController extends Controller
         return $user->save();
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  int  $user_id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show(int $user_id)
-    // {
-    //     //
-    // }
-
     /**
      * Show the form for editing the specified resource.
      *

@@ -68,6 +68,7 @@ export default {
             // if (!this.validateData()){
             //     return;
             // }
+            let oldId = this.id;
             const params = {
                 id: this.id,
                 name: this.name,
@@ -81,13 +82,18 @@ export default {
                 params
             ).then(
                 res => {
-                    if (res['status'] == 200 && res['data'] == 1) {
+                    if (res['status'] == 200 && res['data'] != 0) {
                         this.$notify({
                             group: 'app',
                             type: 'success',
                             title: 'Success!',
                             text: 'The ingredient has been saved correctly!'
                         });
+                        if (oldId == 0) {
+                            this.sleep(2000).then(() => {
+                                window.location = '/ingredients/'+res['data'];
+                            });
+                        }
                     } else {
                         this.$notify({
                             group: 'app',
@@ -129,6 +135,9 @@ export default {
             ).finally(
                 () => this.isLoading = false
             );
+        },
+        sleep(time) {
+            return new Promise((resolve) => setTimeout(resolve, time));
         }
     }
 }

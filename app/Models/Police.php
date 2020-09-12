@@ -93,10 +93,32 @@ class Police
         switch ($action) {
             case 'view':
                 $return = true;
+                if ($about) {
+                    if ($user->role()->first()->name == "SuperAdmin") {
+                        $return = true;
+                    } else {
+                        if ($about->visibility()->first()->name == 'Public') {
+                            $return = true;
+                        } else {
+                            $return = $user->id == $about->user()->first()->id;
+                        }
+                    }
+                }
                 break;
 
             case 'edit':
-                $return = true;
+                $return = false;
+                if ($about) {
+                    if ($user->role()->first()->name == "SuperAdmin") {
+                        $return = true;
+                    } else {
+                        if ($about->visibility()->first()->name == 'Public' && $user->role()->first()->name =="Admin") {
+                            $return = true;
+                        } else {
+                            $return = $user->id == $about->user()->first()->id;
+                        }
+                    }
+                }
                 break;
 
             case 'create':
@@ -104,13 +126,17 @@ class Police
                 break;
 
             case 'delete':
-                $return = true;
+                $return = false;
+                if ($user->role()->name == "SuperAdmin") {
+                    $return = true;
+                }
                 break;
 
             default:
                 # code...
                 break;
         }
+
         return $return;
     }
 
