@@ -29,10 +29,7 @@ class StepController extends Controller
      */
     public function store(Request $request)
     {
-        #Anyboyd can edit recipes must be capable of create steps
-        if (!$this->police->can_do(Recipe::class,'edit',auth()->user())) {
-            return response()->json(['error' => 'Not authorized.'],403);
-        }
+        #Anybody can create steps
         $params = $request->all();
         $step = new Step();
         $step->id = 0;
