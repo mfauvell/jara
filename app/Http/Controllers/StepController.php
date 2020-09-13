@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Step;
 use App\Models\Police;
 use App\Models\Image;
+use App\Models\Recipe;
 use Illuminate\Http\Request;
 
 class StepController extends Controller
@@ -58,8 +59,8 @@ class StepController extends Controller
     public function update(Request $request, int $step_id)
     {
         $step = Step::find($step_id);
-        $recipe = $step->recipe();
-        if (!$this->police->can_do(Recipe::class,'edit',auth()->user(),$recipe)) {
+        $recipe = $step->recipe()->first();
+        if ($recipe && !$this->police->can_do(Recipe::class,'edit',auth()->user(),$recipe)) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
@@ -85,7 +86,7 @@ class StepController extends Controller
 
     public function getStep(int $step_id) {
         $step = Step::find($step_id);
-        $recipe = $step->recipe();
+        $recipe = $step->recipe()->first();
         if (!$this->police->can_do(Recipe::class,'view',auth()->user(),$recipe)) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
