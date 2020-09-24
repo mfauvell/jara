@@ -96,7 +96,7 @@ export default {
                 params
             ).then(
                 res => {
-                    if (res['status'] == 200 && res['data'] == 1) {
+                    if (res['status'] == 200 && res['data'].id != 0) {
                         this.$notify({
                             group: 'app',
                             type: 'success',

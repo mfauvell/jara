@@ -28,59 +28,6 @@ class RecipeController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        /** @var \App\Models\User|null $user */
-        $user = auth()->user();
-        if (!$this->police->can_do(Recipe::class,'view',$user)) {
-            return response()->json(['error' => 'Not authorized.'],403);
-        }
-
-        $recipes = $this->search(new Request());
-
-        $recipes = $recipes->map(function ($recipe) {
-            $recipe->images = $recipe->images()->get();
-            return $recipe;
-        });
-        return view('recipes/list')->with([
-            'recipes' => $recipes
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        if (!$this->police->can_do(Recipe::class,'create',auth()->user())) {
-            return response()->json(['error' => 'Not authorized.'],403);
-        }
-        $recipe = new Recipe();
-        $recipe->id = 0;
-        $images = $recipe->images()->get();
-        $ingredients = $recipe->ingredients()->get();
-        $visibilities = Visibility::all();
-        $steps = $recipe->steps()->get();
-        $steps = $steps->map(function($step) {
-            $step->images = $step->images()->get();
-            return $step;
-        });
-        return view('recipes/form')->with([
-            'recipe' => $recipe,
-            'images' => $images,
-            'ingredients' => $ingredients,
-            'visibilities' => $visibilities,
-            'steps' => $steps
-        ]);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -121,56 +68,6 @@ class RecipeController extends Controller
             }
         }
         return $recipe->id;
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $recipe_id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(int $recipe_id)
-    {
-        $recipe = Recipe::with(['images','visibility','ingredients','steps'])->find($recipe_id);
-        if (!$this->police->can_do(Recipe::class,'view',auth()->user(),$recipe)) {
-            return response()->json(['error' => 'Not authorized.'],403);
-        }
-        $editable = $this->police->can_do(Recipe::class,'edit',auth()->user(),$recipe);
-        $deletable = $this->police->can_do(Recipe::class,'delete',auth()->user(),$recipe);
-        return view('recipes/recipe')->with([
-            'recipe' => $recipe,
-            'editable' => $editable,
-            'deletable' => $deletable
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $recipe_id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(int $recipe_id)
-    {
-        $recipe = Recipe::find($recipe_id);
-        if (!$this->police->can_do(Recipe::class,'edit',auth()->user(),$recipe)) {
-            return response()->json(['error' => 'Not authorized.'],403);
-        }
-        $images = $recipe->images()->get();
-        $ingredients = $recipe->ingredients()->get();
-        $visibilities = Visibility::all();
-        $steps = $recipe->steps()->get();
-        $steps = $steps->map(function($step) {
-            $step->images = $step->images()->get();
-            return $step;
-        });
-        return view('recipes/form')->with([
-            'recipe' => $recipe,
-            'images' => $images,
-            'ingredients' => $ingredients,
-            'visibilities' => $visibilities,
-            'steps' => $steps
-        ]);
     }
 
     /**

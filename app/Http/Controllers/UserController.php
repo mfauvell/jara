@@ -21,41 +21,6 @@ class UserController extends Controller
         $this->police = $police;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        if ($this->police->can_do(User::class,'view',auth()->user())) {
-            $roles = Role::all();
-            return view('users/list')->with([
-                'roles' => $roles
-            ]);
-        } else {
-            return response()->json(['error' => 'Not authorized.'],403);
-        }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        if (!$this->police->can_do(User::class,'create',auth()->user())) {
-            return response()->json(['error' => 'Not authorized.'],403);
-        }
-        $user = new User();
-        $user->id = 0;
-        $roles = Role::all();
-        return view('users/form')->with([
-            'user' => $user,
-            'roles' => $roles
-        ]);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -75,26 +40,8 @@ class UserController extends Controller
         $user->email = $params['email'];
         $user->role_id = $params['role_id'];
         if ($params['password'] != '') $user->password = bcrypt($params['password']);
-        return $user->save();
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $user_id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(int $user_id)
-    {
-        if (!$this->police->can_do(User::class,'edit',auth()->user())) {
-            return response()->json(['error' => 'Not authorized.'],403);
-        }
-        $user = User::find($user_id);
-        $roles = Role::all();
-        return view('users/form')->with([
-            'user' => $user,
-            'roles' => $roles
-        ]);
+        $user->save();
+        return $user;
     }
 
     /**
@@ -115,7 +62,8 @@ class UserController extends Controller
         $user->email = $params['email'];
         $user->role_id = $params['role_id'];
         if ($params['password'] != '') $user->password = bcrypt($params['password']);
-        return $user->save();
+        $user->save();
+        return $user;
     }
 
     /**

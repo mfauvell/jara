@@ -23,48 +23,6 @@ class IngredientController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        if (!$this->police->can_do(Ingredient::class,'view',auth()->user())) {
-            return response()->json(['error' => 'Not authorized.'],403);
-        }
-        $ingredients = Ingredient::all();
-        $ingredientsData = $ingredients->map(function ($ingredient) {
-            return array(
-                'ingredient' => $ingredient,
-                'image' => $ingredient->images()->first()
-            );
-        });
-        return view('ingredients/list')->with([
-            'ingredients' => $ingredientsData
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        if (!$this->police->can_do(Ingredient::class,'create',auth()->user())) {
-            return response()->json(['error' => 'Not authorized.'],403);
-        }
-        $ingredient = new Ingredient();
-        $ingredient->id = 0;
-        $image = new Image();
-        $image->id = 0;
-        return view('ingredients/form')->with([
-            'ingredient' => $ingredient,
-            'image' => $image
-        ]);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -86,29 +44,6 @@ class IngredientController extends Controller
             $rdo = $ingredient->save();
         }
         return $ingredient->id;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $ingredient_id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(int $ingredient_id)
-    {
-        if (!$this->police->can_do(Ingredient::class,'edit',auth()->user())) {
-            return response()->json(['error' => 'Not authorized.'],403);
-        }
-        $ingredient = Ingredient::find($ingredient_id);
-        $image = $ingredient->images()->first();
-        if ($image == '') {
-            $image = new Image();
-            $image->id = 0;
-        };
-        return view('ingredients/form')->with([
-            'ingredient' => $ingredient,
-            'image' => $image
-        ]);
     }
 
     /**
