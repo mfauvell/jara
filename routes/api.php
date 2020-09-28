@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IngredientController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/login', 'Auth\PassportController@login')->name('login');
+
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    #Auth
+    Route::post('/logout', 'Auth\PassportController@logout');
+    #Ingredient
+    Route::get('/ingredients', 'IngredientController@search');
+    Route::get('/ingredients/{ingredient}', 'IngredientController@show');
 });

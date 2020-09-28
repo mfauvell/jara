@@ -6,6 +6,7 @@ use App\Models\Ingredient;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use App\Models\Police;
+use App\Http\Resources\IngredientResource;
 
 class IngredientController extends Controller
 {
@@ -20,6 +21,11 @@ class IngredientController extends Controller
     public function __construct(Police $police)
     {
         $this->police = $police;
+    }
+
+    public function show(Ingredient $ingredient)
+    {
+        return response(['data' => new IngredientResource($ingredient)], 200);
     }
 
     /**
@@ -102,23 +108,23 @@ class IngredientController extends Controller
         $params = $request->all();
 
         $ingredients = Ingredient::search($params);
-        $ingredientsData = $ingredients->map(function ($ingredient) {
-            return array(
-                'ingredient' => $ingredient,
-                'image' => $ingredient->images()->first()
-            );
-        });
-        return $ingredientsData;
+        // $ingredientsData = $ingredients->map(function ($ingredient) {
+        //     return array(
+        //         'ingredient' => $ingredient,
+        //         'image' => $ingredient->images()->first()
+        //     );
+        // });
+        return response(['data' => IngredientResource::collection($ingredients)],200);
     }
 
-    public function getIngredient(int $ingredient_id) {
-        if (!$this->police->can_do(Ingredient::class,'view',auth()->user())) {
-            return response()->json(['error' => 'Not authorized.'],403);
-        }
-        $ingredient = Ingredient::find($ingredient_id);
-        return array(
-            'ingredient' => $ingredient,
-            'image' => $ingredient->images()->first()
-        );
-    }
+    // public function getIngredient(int $ingredient_id) {
+    //     if (!$this->police->can_do(Ingredient::class,'view',auth()->user())) {
+    //         return response()->json(['error' => 'Not authorized.'],403);
+    //     }
+    //     $ingredient = Ingredient::find($ingredient_id);
+    //     return array(
+    //         'ingredient' => $ingredient,
+    //         'image' => $ingredient->images()->first()
+    //     );
+    // }
 }
