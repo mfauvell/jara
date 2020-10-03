@@ -15,6 +15,7 @@ class ProductionSeeder extends Seeder
             RoleSeeder::class,
             RecipeTypeSeeder::class,
             VisibilitySeeder::class,
+            PermissionSeeder::class,
         ]);
     }
 }
