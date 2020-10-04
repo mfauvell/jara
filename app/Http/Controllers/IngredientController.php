@@ -49,7 +49,7 @@ class IngredientController extends Controller
             $ingredient->images()->save($image);
             $rdo = $ingredient->save();
         }
-        return $ingredient->id;
+        return response(['data' => new IngredientResource($ingredient)],201);
     }
 
     /**
@@ -61,7 +61,7 @@ class IngredientController extends Controller
      */
     public function update(Request $request, Ingredient $ingredient)
     {
-        if (!$this->police->can_do('ingredient','edit',auth()->user())) {
+        if (!$this->police->can_do('ingredient','edit',auth()->user(),$ingredient)) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
@@ -78,7 +78,7 @@ class IngredientController extends Controller
                 $rdo = $ingredient->save();
             }
         }
-        return $rdo;
+        return response(['data' => new IngredientResource($ingredient)],200);
     }
 
     /**
@@ -89,10 +89,15 @@ class IngredientController extends Controller
      */
     public function delete(Ingredient $ingredient)
     {
-        //
+        if (!$this->police->can_do('ingredient','delete',auth()->user(),$ingredient)) {
+            return response()->json(['error' => 'Not authorized.'],403);
+        }
+        $ingredient->delete();
+        return response(['data' => $ingredient->id],200);
     }
 
     public function uploadImage(Request $request) {
+        #TODO: Change to API response
         #Anybody logged can upload files
         $params = $request->all();
 

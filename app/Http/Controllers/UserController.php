@@ -30,7 +30,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$this->police->can_do(User::class,'create',auth()->user())) {
+        if (!$this->police->can_do('user', 'create',auth()->user())) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
@@ -48,16 +48,15 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $user_id
+     * @param  User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $user_id)
+    public function update(Request $request, User $user)
     {
-        if (!$this->police->can_do(User::class,'edit',auth()->user())) {
+        if (!$this->police->can_do('user', 'edit', auth()->user(), $user)) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
-        $user = User::find($user_id);
         $user->name = $params['name'];
         $user->email = $params['email'];
         $user->role_id = $params['role_id'];
@@ -69,15 +68,14 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $user_id
+     * @param  User  $user
      * @return \Illuminate\Http\Response
      */
-    public function delete(int $user_id)
+    public function delete(User $user)
     {
-        if (!$this->police->can_do(User::class,'delete',auth()->user())) {
+        if (!$this->police->can_do('user', 'delete', auth()->user(), $user)) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
-        $user = User::find($user_id);
         return $user->delete();
     }
 
@@ -88,7 +86,7 @@ class UserController extends Controller
      * @return collection /App/Model/User
      */
     public function search(Request $request){
-        if (!$this->police->can_do(User::class,'view',auth()->user())) {
+        if (!$this->police->can_do('user','view',auth()->user())) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
