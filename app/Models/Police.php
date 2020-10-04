@@ -122,7 +122,6 @@ class Police
     }
 
     private function can_do_recipe(String $action, User $user, Recipe $recipe = null){
-        #TODO: new permission system
         $return = false;
         $permission = $this->get_details_permission($action, 'recipe');
         switch ($permission->type) {

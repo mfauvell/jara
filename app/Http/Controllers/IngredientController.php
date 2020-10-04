@@ -36,7 +36,7 @@ class IngredientController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$this->police->can_do(Ingredient::class,'create',auth()->user())) {
+        if (!$this->police->can_do('ingredient','create',auth()->user())) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
@@ -56,16 +56,15 @@ class IngredientController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $ingredient_id
+     * @param  Ingredient  $ingredient_id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $ingredient_id)
+    public function update(Request $request, Ingredient $ingredient)
     {
-        if (!$this->police->can_do(Ingredient::class,'edit',auth()->user())) {
+        if (!$this->police->can_do('ingredient','edit',auth()->user())) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
-        $ingredient = Ingredient::find($ingredient_id);
         $ingredient->name = $params['name'];
         $rdo = $ingredient->save();
         if ($params['currentImage'] != $params['nextImage'] && $rdo == 1) {
@@ -85,10 +84,10 @@ class IngredientController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $ingredient_id
+     * @param  Ingredient $ingredient
      * @return \Illuminate\Http\Response
      */
-    public function delete(int $ingredient_id)
+    public function delete(Ingredient $ingredient)
     {
         //
     }
@@ -102,18 +101,13 @@ class IngredientController extends Controller
     }
 
     public function search(Request $request) {
-        if (!$this->police->can_do(Ingredient::class,'view',auth()->user())) {
+        if (!$this->police->can_do('ingredient','view',auth()->user())) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
 
         $ingredients = Ingredient::search($params);
-        // $ingredientsData = $ingredients->map(function ($ingredient) {
-        //     return array(
-        //         'ingredient' => $ingredient,
-        //         'image' => $ingredient->images()->first()
-        //     );
-        // });
+
         return response(['data' => IngredientResource::collection($ingredients)],200);
     }
 
