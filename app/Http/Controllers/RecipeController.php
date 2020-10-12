@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RecipeResource;
 use App\Models\Recipe;
 use App\Models\Image;
 use App\Models\Ingredient;
@@ -25,6 +26,13 @@ class RecipeController extends Controller
     public function __construct(Police $police)
     {
         $this->police = $police;
+    }
+
+    public function show(Recipe $recipe) {
+        if (!$this->police->can_do('recipe','create',auth()->user(),$recipe)) {
+            return response()->json(['error' => 'Not authorized.'],403);
+        }
+        return response(['data' => RecipeResource::make($recipe)],200);
     }
 
     /**
@@ -151,20 +159,17 @@ class RecipeController extends Controller
     public function search(Request $request) {
         /** @var \App\Models\User|null $user */
         $user = auth()->user();
-        if (!$this->police->can_do(Recipe::class,'view',$user)) {
+        if (!$this->police->can_do('recipe','view',$user)) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
+        #TODO: Change limit on search.
         $params['admin'] = false;
         if ($user->role()->first()->name == 'SuperAdmin') {
             $params['admin'] = true;
         }
         $recipes = Recipe::search($params);
-        $recipes = $recipes->map(function ($recipe) {
-            $recipe->images = $recipe->images()->get();
-            return $recipe;
-        });
 
-        return $recipes;
+        return response(['data' => RecipeResource::collection($recipes)],200);
     }
 }

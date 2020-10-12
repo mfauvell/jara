@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Police;
 use App\Models\Role;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
@@ -21,6 +22,10 @@ class UserController extends Controller
         $this->police = $police;
     }
 
+    public function show(User $user)
+    {
+        return response(['data' => new UserResource($user)], 200);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -41,7 +46,7 @@ class UserController extends Controller
         $user->role_id = $params['role_id'];
         if ($params['password'] != '') $user->password = bcrypt($params['password']);
         $user->save();
-        return $user;
+        return response(['data' => new UserResource($user)],201);
     }
 
     /**
@@ -62,7 +67,7 @@ class UserController extends Controller
         $user->role_id = $params['role_id'];
         if ($params['password'] != '') $user->password = bcrypt($params['password']);
         $user->save();
-        return $user;
+        return response(['data' => new UserResource($user)],200);
     }
 
     /**
@@ -76,7 +81,8 @@ class UserController extends Controller
         if (!$this->police->can_do('user', 'delete', auth()->user(), $user)) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
-        return $user->delete();
+        $user->delete();
+        return response(['data' => $user->id],200);
     }
 
     /**
@@ -91,6 +97,7 @@ class UserController extends Controller
         }
         $params = $request->all();
 
-        return User::search($params);
+        $users = User::search($params);
+        return response(['data' => UserResource::collection($users)],200);
     }
 }

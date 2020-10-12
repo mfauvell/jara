@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ImageResource extends JsonResource
+class StepResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,11 @@ class ImageResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->file_name,
-            'mime' => $this->mime,
-            'size' => $this->size,
-            'url' => url('/api/images/' . $this->id)
+            'order' => $this->order,
+            'title' => $this->title,
+            'description' => $this->description,
+            'time' => $this->time,
+            'images' => ImageResource::collection($this->images)
         ];
     }
 }

@@ -32,14 +32,14 @@ class Image extends Model
      * @param UploadedFile $file
      * @return void
      */
-    public static function upload(String $prefix, UploadedFile $file){
+    public static function upload(String $prefix, String $title, UploadedFile $file){
         try {
             $content = File::get($file->getPathName());
             $fileName = $prefix . '_' . date('YmdHis') . '_' . $file->getClientOriginalName();
             Storage::disk('images')->put($fileName, $content);
             #Create db row
             $image = new Image();
-            $image->title = '';
+            $image->title = $title;
             $image->file_name = $fileName;
             $image->mime = $file->getMimeType();
             $image->md5 = md5(storage_path('app/images/'.$fileName));

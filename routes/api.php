@@ -18,12 +18,18 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', 'Auth\PassportController@login')->name('login');
 
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    // Route::get('/user', function (Request $request) {
+    //     return $request->user();
+    // });
     #Auth
     Route::post('/logout', 'Auth\PassportController@logout');
+    #User
+    Route::get('/users','UserController@search');
+    Route::get('/users/{user}', 'UserController@show');
     #Ingredient
     Route::get('/ingredients', 'IngredientController@search');
     Route::get('/ingredients/{ingredient}', 'IngredientController@show');
+    #Recipe
+    Route::get('/recipes', 'RecipeController@search');
+    Route::get('/recipes/{recipe}', 'RecipeController@show');
 });

@@ -102,7 +102,7 @@ class IngredientController extends Controller
         $params = $request->all();
 
         //TODO: Control error
-        return Image::upload('ingredient', $params['file']);
+        return Image::upload('ingredient', $params['title'], $params['file']);
     }
 
     public function search(Request $request) {
@@ -115,15 +115,4 @@ class IngredientController extends Controller
 
         return response(['data' => IngredientResource::collection($ingredients)],200);
     }
-
-    // public function getIngredient(int $ingredient_id) {
-    //     if (!$this->police->can_do(Ingredient::class,'view',auth()->user())) {
-    //         return response()->json(['error' => 'Not authorized.'],403);
-    //     }
-    //     $ingredient = Ingredient::find($ingredient_id);
-    //     return array(
-    //         'ingredient' => $ingredient,
-    //         'image' => $ingredient->images()->first()
-    //     );
-    // }
 }

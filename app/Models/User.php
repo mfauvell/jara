@@ -68,6 +68,7 @@ class User extends Authenticatable
         if (isset($params['role_id']) && $params['role_id'] != '') {
             $where[] = array('role_id', '=', $params['role_id']);
         }
-        return DB::table('users')->select('id', 'name', 'email', 'role_id')->where($where)->whereNull('deleted_at')->get();
+        // return DB::table('users')->select('id', 'name', 'email', 'role_id')->where($where)->whereNull('deleted_at')->get();
+        return User::with('role')->where($where)->get();
     }
 }

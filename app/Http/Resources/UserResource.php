@@ -4,7 +4,9 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ImageResource extends JsonResource
+use App\Models\Role;
+
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +18,9 @@ class ImageResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->file_name,
-            'mime' => $this->mime,
-            'size' => $this->size,
-            'url' => url('/api/images/' . $this->id)
+            'name' => $this->name,
+            'email' => $this->email,
+            'role' => new RoleResource($this->role)
         ];
     }
 }
