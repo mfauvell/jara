@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ImageResource;
 use App\Models\Ingredient;
 use App\Models\Image;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class IngredientController extends Controller
 
     public function show(Ingredient $ingredient)
     {
-        return response(['data' => new IngredientResource($ingredient)], 200);
+        return response(['data' => IngredientResource::make($ingredient)], 200);
     }
 
     /**
@@ -49,7 +50,7 @@ class IngredientController extends Controller
             $ingredient->images()->save($image);
             $rdo = $ingredient->save();
         }
-        return response(['data' => new IngredientResource($ingredient)],201);
+        return response(['data' => IngredientResource::make($ingredient)],201);
     }
 
     /**
@@ -78,7 +79,7 @@ class IngredientController extends Controller
                 $rdo = $ingredient->save();
             }
         }
-        return response(['data' => new IngredientResource($ingredient)],200);
+        return response(['data' => IngredientResource::make($ingredient)],200);
     }
 
     /**
@@ -97,12 +98,15 @@ class IngredientController extends Controller
     }
 
     public function uploadImage(Request $request) {
-        #TODO: Change to API response
-        #Anybody logged can upload files
+        if (!$this->police->can_do('ingredient','uploadImage',auth()->user())) {
+            return response()->json(['error' => 'Not authorized.'],403);
+        }
+
         $params = $request->all();
 
-        //TODO: Control error
-        return Image::upload('ingredient', $params['title'], $params['file']);
+        $image = Image::upload('ingredient', $params['title'], $params['file']);
+
+        return response(['data' => ImageResource::make($image)],200);
     }
 
     public function search(Request $request) {

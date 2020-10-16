@@ -27,9 +27,17 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/users','UserController@search');
     Route::get('/users/{user}', 'UserController@show');
     #Ingredient
-    Route::get('/ingredients', 'IngredientController@search');
-    Route::get('/ingredients/{ingredient}', 'IngredientController@show');
+    Route::get('ingredients', 'IngredientController@search');
+    Route::post('ingredients','IngredientController@store');
+    Route::get('ingredients/{ingredient}', 'IngredientController@show');
+    Route::put('ingredients/{ingredient}', 'IngredientController@update');
+    Route::delete('ingredients/{ingredient}', 'IngredientController@delete');
+    Route::post('ingredients/image', 'IngredientController@uploadImage');
     #Recipe
     Route::get('/recipes', 'RecipeController@search');
     Route::get('/recipes/{recipe}', 'RecipeController@show');
+});
+
+Route::group(['middleware' => ['signed']], function () {
+    Route::get('/images/{image}','ImageController@getImage')->name('getImage');
 });

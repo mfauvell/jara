@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\URL;
 
 class ImageResource extends JsonResource
 {
@@ -19,7 +20,12 @@ class ImageResource extends JsonResource
             'name' => $this->file_name,
             'mime' => $this->mime,
             'size' => $this->size,
-            'url' => url('/api/images/' . $this->id)
+            // 'url' => url('/api/images/' . $this->id)
+            'url' => URL::temporarySignedRoute(
+                'getImage',
+                now()->addMinutes(10),
+                ['image' => $this]
+            )
         ];
     }
 }

@@ -23,12 +23,8 @@ class ImageController extends Controller
         $this->police = $police;
     }
 
-    public function getImage(int $image_id) {
-        $image = Image::find($image_id);
-        if (!$image && $image_id != 0) {
-            abort(404);
-        }
-        if ($image_id == 0) {
+    public function getImage(Image $image) {
+        if (!$image) {
             $path = storage_path('app' . DIRECTORY_SEPARATOR . 'no-image.png');
             $type = 'image/png';
         } else {
