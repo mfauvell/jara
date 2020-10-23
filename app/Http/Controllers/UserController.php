@@ -24,7 +24,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        return response(['data' => new UserResource($user)], 200);
+        return response(['data' => UserResource::make($user)], 200);
     }
 
     /**
@@ -46,7 +46,7 @@ class UserController extends Controller
         $user->role_id = $params['role_id'];
         if ($params['password'] != '') $user->password = bcrypt($params['password']);
         $user->save();
-        return response(['data' => new UserResource($user)],201);
+        return response(['data' => UserResource::make($user)],201);
     }
 
     /**
@@ -67,7 +67,7 @@ class UserController extends Controller
         $user->role_id = $params['role_id'];
         if ($params['password'] != '') $user->password = bcrypt($params['password']);
         $user->save();
-        return response(['data' => new UserResource($user)],200);
+        return response(['data' => UserResource::make($user)],200);
     }
 
     /**

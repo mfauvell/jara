@@ -192,6 +192,12 @@ class PermissionSeeder extends Seeder
             'section' => 'recipe',
             'description' => 'View other user recipes'
         ]);
+        Permission::create([
+            'key' => 'uploadImage',
+            'type' => 'edit',
+            'section' => 'recipe',
+            'description' => 'Upload images to recipes'
+        ]);
         DB::table('permission_role')->insert([
             'role_id' => DB::table('roles')->where('name', '=', 'SuperAdmin')->get(['id'])->first()->id,
             'permission_id' => DB::table('permissions')->where([['key', '=', 'create'],['type','=','create'],['section','=','user']])->get(['id'])->first()->id,
@@ -307,6 +313,10 @@ class PermissionSeeder extends Seeder
         DB::table('permission_role')->insert([
             'role_id' => DB::table('roles')->where('name', '=', 'SuperAdmin')->get(['id'])->first()->id,
             'permission_id' => DB::table('permissions')->where([['key', '=', 'viewOther'],['type','=','view'],['section','=','recipe']])->get(['id'])->first()->id,
+        ]);
+        DB::table('permission_role')->insert([
+            'role_id' => DB::table('roles')->where('name', '=', 'SuperAdmin')->get(['id'])->first()->id,
+            'permission_id' => DB::table('permissions')->where([['key', '=', 'uploadImage'],['type','=','edit'],['section','=','recipe']])->get(['id'])->first()->id,
         ]);
     }
 }

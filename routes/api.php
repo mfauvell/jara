@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     #Recipe
     Route::get('/recipes', 'RecipeController@search');
     Route::get('/recipes/{recipe}', 'RecipeController@show');
+    #Step
 });
 
 Route::group(['middleware' => ['signed']], function () {

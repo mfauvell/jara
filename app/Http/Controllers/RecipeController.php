@@ -12,6 +12,7 @@ use App\Models\Visibility;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use App\Http\Resources\ImageResource;
 
 class RecipeController extends Controller
 {
@@ -43,7 +44,7 @@ class RecipeController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$this->police->can_do(Recipe::class,'create',auth()->user())) {
+        if (!$this->police->can_do('recipe','create',auth()->user())) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
@@ -75,7 +76,7 @@ class RecipeController extends Controller
                 $rdo = $recipe->save();
             }
         }
-        return $recipe->id;
+        return response(['data' => RecipeResource::make($recipe)],200);
     }
 
     /**
@@ -85,10 +86,9 @@ class RecipeController extends Controller
      * @param  int  $recipe_id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $recipe_id)
+    public function update(Request $request, Recipe $recipe)
     {
-        $recipe = Recipe::find($recipe_id);
-        if (!$this->police->can_do(Recipe::class,'edit',auth()->user(),$recipe)) {
+        if (!$this->police->can_do('recipe','edit',auth()->user(),$recipe)) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
@@ -129,7 +129,7 @@ class RecipeController extends Controller
                 $rdo = $recipe->save();
             }
         }
-        return $rdo;
+        return response(['data' => RecipeResource::make($recipe)],200);
     }
 
     /**
@@ -138,22 +138,25 @@ class RecipeController extends Controller
      * @param  int  $recipe_id
      * @return \Illuminate\Http\Response
      */
-    public function delete(int $recipe_id)
+    public function delete(Recipe $recipe)
     {
-        $recipe = Recipe::find($recipe_id);
-        if (!$this->police->can_do(Recipe::class,'delete',auth()->user(),$recipe)) {
+        if (!$this->police->can_do('recipe','delete',auth()->user(),$recipe)) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $recipe->delete();
-        return Redirect::route('recipes');
+        return response(['data' => $recipe->id],200);
     }
 
     public function uploadImage(Request $request) {
-        #Anybody logged can upload files
+        if (!$this->police->can_do('recipe','uploadImage',auth()->user())) {
+            return response()->json(['error' => 'Not authorized.'],403);
+        }
+
         $params = $request->all();
 
-        //TODO: Control error
-        return Image::upload('recipe', $params['file']);
+        $image = Image::upload('recipe', $params['title'], $params['file']);
+
+        return response(['data' => ImageResource::make($image)],200);
     }
 
     public function search(Request $request) {

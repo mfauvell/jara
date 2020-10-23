@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StepResource;
+use App\Http\Resources\ImageResource;
 use App\Models\Step;
 use App\Models\Police;
 use App\Models\Image;
@@ -30,7 +32,9 @@ class StepController extends Controller
      */
     public function store(Request $request)
     {
-        #Anybody can create steps
+        if (!$this->police->can_do('recipe','create',auth()->user())) {
+            return response()->json(['error' => 'Not authorized.'],403);
+        }
         $params = $request->all();
         $step = new Step();
         $step->id = 0;
@@ -46,7 +50,7 @@ class StepController extends Controller
             }
             $rdo = $step->save();
         }
-        return $step->id;
+        return response(['data' => StepResource::make($step)],201);
     }
 
     /**
@@ -56,11 +60,10 @@ class StepController extends Controller
      * @param  \App\Models\Step  $step
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $step_id)
+    public function update(Request $request, Step $step)
     {
-        $step = Step::find($step_id);
         $recipe = $step->recipe()->first();
-        if ($recipe && !$this->police->can_do(Recipe::class,'edit',auth()->user(),$recipe)) {
+        if ($recipe && !$this->police->can_do('recipe','edit',auth()->user(),$recipe)) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
@@ -81,24 +84,26 @@ class StepController extends Controller
             }
             $rdo = $step->save();
         }
-        return $rdo;
+        return response(['data' => StepResource::make($step)],200);
     }
 
-    public function getStep(int $step_id) {
-        $step = Step::find($step_id);
+    public function getStep(Step $step) {
         $recipe = $step->recipe()->first();
-        if (!$this->police->can_do(Recipe::class,'view',auth()->user(),$recipe)) {
+        if (!$this->police->can_do('recipe','view',auth()->user(),$recipe)) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
-        $step->images = $step->images()->get();
-        return $step;
+        return response(['data' => StepResource::make($step)],200);
     }
 
     public function uploadImage(Request $request) {
-        #Anybody logged can upload files
+        if (!$this->police->can_do('recipe','uploadImage',auth()->user())) {
+            return response()->json(['error' => 'Not authorized.'],403);
+        }
+
         $params = $request->all();
 
-        //TODO: Control error
-        return Image::upload('step', $params['file']);
+        $image = Image::upload('step', $params['title'], $params['file']);
+
+        return response(['data' => ImageResource::make($image)],200);
     }
 }
