@@ -40,6 +40,18 @@ class Police
         return $return;
     }
 
+    public function get_permissions_user(User $user, String $type, String $entity) {
+        $return = array();
+
+        $related_permissions = $this->get_permissions_type_section($type,$entity);
+
+        foreach ($related_permissions as $key => $permission) {
+            $return[$key] = $this->check_permission($user->role_id,$permission->id);
+        }
+
+        return $return;
+    }
+
     private function can_do_user(String $action, User $user, User $user_check = null){
         $return = false;
         $permission = $this->get_details_permission($action, 'user');

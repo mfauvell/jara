@@ -166,11 +166,9 @@ class RecipeController extends Controller
             return response()->json(['error' => 'Not authorized.'],403);
         }
         $params = $request->all();
-        #TODO: Change limit on search.
-        $params['admin'] = false;
-        if ($user->role()->first()->name == 'SuperAdmin') {
-            $params['admin'] = true;
-        }
+        $permissions = $this->police->get_permissions_user($user, 'view', 'recipe');
+        $params['public'] = $permissions['viewPublic'];
+        $params['other'] = $permissions['viewOther'];
         $recipes = Recipe::search($params);
 
         return response(['data' => RecipeResource::collection($recipes)],200);

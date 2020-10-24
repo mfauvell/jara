@@ -53,9 +53,9 @@ class Recipe extends Model
         if (isset($params['ingredient']) && $params['ingredient'] != '') {
             $whereIngredient[] = array('ingredient_id', '=', $params['ingredient']);
         }
-        if ($params['admin']){
+        if ($params['other']){
             $query = Recipe::where($where);
-        } else {
+        } else if ($params['public']) {
             $query = Recipe::where(function($q) use ($user_id) {
                 $q->whereHas('visibility',function($q) {
                     $q->where('name','=','Public');
@@ -63,6 +63,8 @@ class Recipe extends Model
                 $q->orWhere('user_id', '=', $user_id);
             })
             ->where($where);
+        } else {
+            $query = Recipe::where('user_id', '=', $user_id)->where($where);
         }
         $query->where(function($q) use ($whereIngredient){
             if ($whereIngredient) {

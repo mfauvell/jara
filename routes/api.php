@@ -18,14 +18,14 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', 'Auth\PassportController@login')->name('login');
 
 Route::group(['middleware' => ['auth:api']], function () {
-    // Route::get('/user', function (Request $request) {
-    //     return $request->user();
-    // });
     #Auth
     Route::post('/logout', 'Auth\PassportController@logout');
     #User
     Route::get('/users','UserController@search');
+    Route::post('/users','UserController@store');
     Route::get('/users/{user}', 'UserController@show');
+    Route::put('/users/{user}', 'UserController@update');
+    Route::delete('/users/{user}', 'UserController@delete');
     #Ingredient
     Route::get('ingredients', 'IngredientController@search');
     Route::post('ingredients','IngredientController@store');
@@ -35,8 +35,17 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('ingredients/image', 'IngredientController@uploadImage');
     #Recipe
     Route::get('/recipes', 'RecipeController@search');
+    Route::post('recipes','RecipeController@store');
     Route::get('/recipes/{recipe}', 'RecipeController@show');
+    Route::put('recipes/{recipe}', 'RecipeController@update');
+    Route::delete('recipes/{recipe}', 'RecipeController@delete');
+    Route::post('recipes/image', 'RecipeController@uploadImage');
     #Step
+    Route::post('steps','StepController@store');
+    Route::get('/steps/{step}', 'StepController@show');
+    Route::put('steps/{step}', 'StepController@update');
+    Route::delete('steps/{step}', 'StepController@delete');
+    Route::post('steps/image', 'StepController@uploadImage');
 });
 
 Route::group(['middleware' => ['signed']], function () {

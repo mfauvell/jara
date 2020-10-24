@@ -87,6 +87,16 @@ class StepController extends Controller
         return response(['data' => StepResource::make($step)],200);
     }
 
+    public function delete(Step $step)
+    {
+        $recipe = $step->recipe()->first();
+        if (!$this->police->can_do('recipe','delete',auth()->user(),$recipe)) {
+            return response()->json(['error' => 'Not authorized.'],403);
+        }
+        $step->delete();
+        return response(['data' => $step->id],200);
+    }
+
     public function getStep(Step $step) {
         $recipe = $step->recipe()->first();
         if (!$this->police->can_do('recipe','view',auth()->user(),$recipe)) {
