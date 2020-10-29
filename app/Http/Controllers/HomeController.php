@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Recipe;
 use App\Models\Police;
 
 class HomeController extends Controller

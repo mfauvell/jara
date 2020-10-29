@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\Police;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\File;
 

@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Police;
-use App\Models\Role;
 use App\Http\Resources\UserResource;
+use Throwable;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -24,6 +25,10 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        if (!$this->police->can_do('user', 'view',auth()->user(),$user)) {
+            Log::warning('No authorized attempt of view a user', ['user' => auth()->user()->id, 'user_acces' => $user->id]);
+            return response()->json(['error' => 'Not authorized.'],403);
+        }
         return response(['data' => UserResource::make($user)], 200);
     }
 
@@ -36,17 +41,25 @@ class UserController extends Controller
     public function store(Request $request)
     {
         if (!$this->police->can_do('user', 'create',auth()->user())) {
+            unset($request['password']);
+            Log::warning('No authorized attempt of create a user', ['user' => auth()->user()->id, 'request' => $request]);
             return response()->json(['error' => 'Not authorized.'],403);
         }
-        $params = $request->all();
-        $user = new User();
-        $user->id = 0;
-        $user->name = $params['name'];
-        $user->email = $params['email'];
-        $user->role_id = $params['role_id'];
-        if ($params['password'] != '') $user->password = bcrypt($params['password']);
-        $user->save();
-        return response(['data' => UserResource::make($user)],201);
+        try {
+            $params = $request->all();
+            $user = new User();
+            $user->id = 0;
+            $user->name = $params['name'];
+            $user->email = $params['email'];
+            $user->role_id = $params['role_id'];
+            if ($params['password'] != '') $user->password = bcrypt($params['password']);
+            $user->save();
+            return response(['data' => UserResource::make($user)],201);
+        } catch (Throwable $e) {
+            unset($request['password']);
+            Log::error('An error has ocurred when create a user', ['exception' => $e, 'request' => $request]);
+            return response()->json(['error' => 'Unexpected server error.'],500);
+        }
     }
 
     /**
@@ -59,15 +72,23 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         if (!$this->police->can_do('user', 'edit', auth()->user(), $user)) {
+            unset($request['password']);
+            Log::warning('No authorized attempt of update a user', ['user' => auth()->user()->id, 'request' => $request, 'user_access' => $user->id]);
             return response()->json(['error' => 'Not authorized.'],403);
         }
-        $params = $request->all();
-        $user->name = $params['name'];
-        $user->email = $params['email'];
-        $user->role_id = $params['role_id'];
-        if ($params['password'] != '') $user->password = bcrypt($params['password']);
-        $user->save();
-        return response(['data' => UserResource::make($user)],200);
+        try {
+            $params = $request->all();
+            $user->name = $params['name'];
+            $user->email = $params['email'];
+            $user->role_id = $params['role_id'];
+            if ($params['password'] != '') $user->password = bcrypt($params['password']);
+            $user->save();
+            return response(['data' => UserResource::make($user)],200);
+        } catch (Throwable $e) {
+            unset($request['password']);
+            Log::error('An error has ocurred when update a user', ['exception' => $e, 'request' => $request, 'user' => $user->id]);
+            return response()->json(['error' => 'Unexpected server error.'],500);
+        }
     }
 
     /**
@@ -79,10 +100,16 @@ class UserController extends Controller
     public function delete(User $user)
     {
         if (!$this->police->can_do('user', 'delete', auth()->user(), $user)) {
+            Log::warning('No authorized attempt of delete a user', ['user' => auth()->user()->id, 'user_access' => $user->id]);
             return response()->json(['error' => 'Not authorized.'],403);
         }
-        $user->delete();
-        return response(['data' => $user->id],200);
+        try {
+            $user->delete();
+            return response(['data' => $user->id],200);
+        } catch (Throwable $e) {
+            Log::error('An error has ocurred when delete a user', ['exception' => $e, 'user' => $user->id]);
+            return response()->json(['error' => 'Unexpected server error.'],500);
+        }
     }
 
     /**
@@ -93,11 +120,17 @@ class UserController extends Controller
      */
     public function search(Request $request){
         if (!$this->police->can_do('user','view',auth()->user())) {
+            Log::warning('No authorized attempt of search users', ['user' => auth()->user()->id, 'request' => $request]);
             return response()->json(['error' => 'Not authorized.'],403);
         }
-        $params = $request->all();
+        try {
+            $params = $request->all();
 
-        $users = User::search($params);
-        return response(['data' => UserResource::collection($users)],200);
+            $users = User::search($params);
+            return response(['data' => UserResource::collection($users)],200);
+        } catch (Throwable $e) {
+            Log::error('An error has ocurred when delete a user', ['exception' => $e, 'request' => $request]);
+            return response()->json(['error' => 'Unexpected server error.'],500);
+        }
     }
 }
