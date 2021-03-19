@@ -1,4 +1,5 @@
 <?php
+Namespace Database\Seeders;
 
 use App\Models\Ingredient;
 use Illuminate\Database\Seeder;

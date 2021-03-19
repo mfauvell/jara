@@ -6,94 +6,94 @@
 
 require('./bootstrap');
 
-import Vue from 'vue'
-import {mapGetters, mapActions} from 'vuex';
+// import Vue from 'vue'
+// import {mapGetters, mapActions} from 'vuex';
 
-import VueSidebarMenu from 'vue-sidebar-menu'
+// import VueSidebarMenu from 'vue-sidebar-menu'
 
-import VueGoodTablePlugin from 'vue-good-table'
-// import vue2Dropzone from 'vue2-dropzone'
-import vSelect from 'vue-select'
-import Notifications from 'vue-notification'
-import FileSelector from 'vue-file-selector';
-import JwPagination from 'jw-vue-pagination';
-import VueGallery from 'vue-gallery';
-// import Autocomplete from '@trevoreyre/autocomplete-vue'
-import Autocomplete from 'v-autocomplete';
-import VModal from 'vue-js-modal';
-import VueCarousel from 'vue-carousel';
+// import VueGoodTablePlugin from 'vue-good-table'
+// // import vue2Dropzone from 'vue2-dropzone'
+// import vSelect from 'vue-select'
+// import Notifications from 'vue-notification'
+// import FileSelector from 'vue-file-selector';
+// import JwPagination from 'jw-vue-pagination';
+// import VueGallery from 'vue-gallery';
+// // import Autocomplete from '@trevoreyre/autocomplete-vue'
+// import Autocomplete from 'v-autocomplete';
+// import VModal from 'vue-js-modal';
+// import VueCarousel from 'vue-carousel';
 
-import store from './store/store';
+// import store from './store/store';
 
-Vue.use(VueSidebarMenu);
-Vue.use(VueGoodTablePlugin);
-// Vue.use(vue2Dropzone);
-Vue.use(Notifications);
-Vue.use(FileSelector);
-Vue.use(Autocomplete);
-Vue.use(VModal, {
-    dynamicDefaults: {
-        draggable: true,
-        resizable: true,
-        adatative: true,
-        height: 'auto',
-        width: '800'
-    }
-});
-Vue.use(VueCarousel);
+// Vue.use(VueSidebarMenu);
+// Vue.use(VueGoodTablePlugin);
+// // Vue.use(vue2Dropzone);
+// Vue.use(Notifications);
+// Vue.use(FileSelector);
+// Vue.use(Autocomplete);
+// Vue.use(VModal, {
+//     dynamicDefaults: {
+//         draggable: true,
+//         resizable: true,
+//         adatative: true,
+//         height: 'auto',
+//         width: '800'
+//     }
+// });
+// Vue.use(VueCarousel);
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+// /**
+//  * The following block of code may be used to automatically register your
+//  * Vue components. It will recursively scan this directory for the Vue
+//  * components and automatically register them with their "basename".
+//  *
+//  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+//  */
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-//Components imported
-Vue.component('v-select', vSelect);
-// Vue.component('vue-dropzone', vue2Dropzone);
-Vue.component('jw-pagination', JwPagination);
-Vue.component('VGallery', VueGallery);
+// // const files = require.context('./', true, /\.vue$/i)
+// // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+// //Components imported
+// Vue.component('v-select', vSelect);
+// // Vue.component('vue-dropzone', vue2Dropzone);
+// Vue.component('jw-pagination', JwPagination);
+// Vue.component('VGallery', VueGallery);
 
-//My components
-// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('my-menu', require('./components/MyMenu.vue').default);
-Vue.component('user-list', require('./components/user/UserList.vue').default);
-Vue.component('user-form', require('./components/user/UserForm.vue').default);
-Vue.component('ingredient-list', require('./components/ingredient/IngredientList.vue').default);
-Vue.component('ingredient-form', require('./components/ingredient/IngredientForm.vue').default);
-Vue.component('recipe-list', require('./components/recipe/RecipeList.vue').default);
-Vue.component('recipe-form', require('./components/recipe/RecipeForm.vue').default);
-Vue.component('recipe', require('./components/recipe/Recipe.vue').default);
-Vue.component('dashboard', require('./components/Dashboard.vue').default)
+// //My components
+// // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Vue.component('my-menu', require('./components/MyMenu.vue').default);
+// Vue.component('user-list', require('./components/user/UserList.vue').default);
+// Vue.component('user-form', require('./components/user/UserForm.vue').default);
+// Vue.component('ingredient-list', require('./components/ingredient/IngredientList.vue').default);
+// Vue.component('ingredient-form', require('./components/ingredient/IngredientForm.vue').default);
+// Vue.component('recipe-list', require('./components/recipe/RecipeList.vue').default);
+// Vue.component('recipe-form', require('./components/recipe/RecipeForm.vue').default);
+// Vue.component('recipe', require('./components/recipe/Recipe.vue').default);
+// Vue.component('dashboard', require('./components/Dashboard.vue').default)
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+// /**
+//  * Next, we will create a fresh Vue application instance and attach it to
+//  * the page. Then, you may begin adding components to this application
+//  * or customize the JavaScript scaffolding to fit your unique needs.
+//  */
 
-const app = new Vue({
-    el: '#app',
-    store,
-    computed: {
-        ...mapGetters({
-            collapsed: 'collapsed',
-            isOnMobile: 'onMobile'
-        })
-    },
-    methods: {
-        ...mapActions({
-            setCollapsed: 'setCollapsed',
-            setOnMobile: 'setOnMobile',
-            setIsAdmin: 'setIsAdmin'
-        }),
-        isAdmin(next) {
-            this.setIsAdmin(next);
-            return '';
-        }
-    }
-});
+// const app = new Vue({
+//     el: '#app',
+//     store,
+//     computed: {
+//         ...mapGetters({
+//             collapsed: 'collapsed',
+//             isOnMobile: 'onMobile'
+//         })
+//     },
+//     methods: {
+//         ...mapActions({
+//             setCollapsed: 'setCollapsed',
+//             setOnMobile: 'setOnMobile',
+//             setIsAdmin: 'setIsAdmin'
+//         }),
+//         isAdmin(next) {
+//             this.setIsAdmin(next);
+//             return '';
+//         }
+//     }
+// });
